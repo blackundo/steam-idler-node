@@ -1,19 +1,58 @@
-# Simple Steam Idler Web
+# Steam Idler - Phiên bản cải tiến
 
-## Hướng dẫn sử dụng
+Ứng dụng quản lý Steam accounts với giao diện web hiện đại.
 
-1. Cài đặt dependencies:
-   ```bash
-   npm install
-   ```
-2. Chạy server:
-   ```bash
-   node index.js
-   ```
-3. Truy cập giao diện web tại: http://localhost:8080
+## Cấu trúc dự án
 
-- Giao diện sử dụng Tailwind CSS.
-- Thêm user Steam bằng form trên trang chủ.
-- Xem, xóa user tại trang /users.
-- Trạng thái hoạt động của user sẽ hiển thị trong danh sách.
-- Thông tin user được lưu trong file users.json.
+```
+├── config/           # Cấu hình database
+├── controllers/      # Logic xử lý request
+├── middleware/       # Middleware xác thực
+├── models/          # Model dữ liệu
+├── routes/          # Định nghĩa routes
+├── utils/           # Utility functions
+├── views/           # EJS templates
+│   ├── layouts/     # Layout chính
+│   ├── partials/    # Components tái sử dụng
+│   ├── auth/        # Templates đăng nhập
+│   └── pages/       # Templates trang
+├── public/          # Static files
+│   ├── css/
+│   ├── js/
+│   └── images/
+└── index.js         # Entry point
+```
+
+## Tính năng
+
+- ✅ Quản lý Steam accounts
+- ✅ Đăng nhập/đăng xuất
+- ✅ Pause/Resume Steam clients
+- ✅ TOTP 2FA support
+- ✅ Giao diện responsive với Tailwind CSS
+- ✅ Template engine EJS
+- ✅ Cấu trúc MVC rõ ràng
+
+## Cài đặt
+
+```bash
+npm install
+npm start
+```
+
+## Cấu trúc MVC
+
+- **Models**: Quản lý dữ liệu User
+- **Views**: Templates EJS với layout system
+- **Controllers**: Xử lý logic business
+- **Routes**: Định nghĩa endpoints
+- **Middleware**: Xác thực và bảo mật
+- **Utils**: Steam service và helpers
+
+## Dễ dàng mở rộng
+
+- Thêm models mới trong `models/`
+- Tạo controllers mới trong `controllers/`
+- Định nghĩa routes trong `routes/`
+- Tạo templates trong `views/`
+- Thêm static files trong `public/`

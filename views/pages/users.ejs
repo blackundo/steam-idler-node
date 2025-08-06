@@ -1,0 +1,136 @@
+<div class="min-h-screen bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900 p-4">
+    <div class="max-w-7xl mx-auto">
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-8">
+            <h2 class="text-3xl font-bold text-white drop-shadow-lg">Danh sách User</h2>
+            <a href="/logout" class="text-red-400 hover:text-red-300 transition-colors duration-300 hover:scale-110 transform">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                </svg>
+            </a>
+        </div>
+        
+        <!-- Glass Table Container -->
+        <div class="backdrop-blur-xl bg-white/10 rounded-3xl border border-white/20 shadow-2xl overflow-hidden animate-fade-in">
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead>
+                        <tr class="bg-white/10 backdrop-blur-sm">
+                            <th class="p-4 text-left text-white font-semibold border-b border-white/20">ID</th>
+                            <th class="p-4 text-left text-white font-semibold border-b border-white/20">Username</th>
+                            <th class="p-4 text-left text-white font-semibold border-b border-white/20">Trạng thái</th>
+                            <th class="p-4 text-left text-white font-semibold border-b border-white/20">Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% users.forEach(function(user, index) { %>
+                            <tr class="hover:bg-white/5 transition-colors duration-300 animate-slide-in" style="animation-delay: <%= index * 0.1 %>s">
+                                <td class="p-4 text-white/90 border-b border-white/10"><%= user.id %></td>
+                                <td class="p-4 text-white font-medium border-b border-white/10"><%= user.username %></td>
+                                <td class="p-4 border-b border-white/10">
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium <%= getUserStatusClass(user.id) %>">
+                                        <div class="w-2 h-2 rounded-full mr-2 <%= isUserPaused(user.id) ? 'bg-yellow-400' : 'bg-green-400' %>"></div>
+                                        <%= getUserStatus(user.id) %>
+                                    </span>
+                                </td>
+                                <td class="p-4 border-b border-white/10">
+                                    <div class="flex flex-wrap gap-2">
+                                        <a href="/users/<%= user.id %>/totp" 
+                                           class="inline-flex items-center px-3 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm rounded-lg hover:from-blue-600 hover:to-blue-700 transform hover:scale-105 transition-all duration-300 shadow-lg">
+                                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                                            </svg>
+                                            Mã 2FA
+                                        </a>
+                                        
+                                        <% if (isUserPaused(user.id)) { %>
+                                            <form style="display:inline" method="POST" action="/users/<%= user.id %>/resume">
+                                                <button type="submit" 
+                                                        class="inline-flex items-center px-3 py-2 bg-gradient-to-r from-green-500 to-green-600 text-white text-sm rounded-lg hover:from-green-600 hover:to-green-700 transform hover:scale-105 transition-all duration-300 shadow-lg">
+                                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                    </svg>
+                                                    Resume
+                                                </button>
+                                            </form>
+                                        <% } else { %>
+                                            <form style="display:inline" method="POST" action="/users/<%= user.id %>/pause">
+                                                <button type="submit" 
+                                                        class="inline-flex items-center px-3 py-2 bg-gradient-to-r from-yellow-500 to-yellow-600 text-white text-sm rounded-lg hover:from-yellow-600 hover:to-yellow-700 transform hover:scale-105 transition-all duration-300 shadow-lg">
+                                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                    </svg>
+                                                    Pause
+                                                </button>
+                                            </form>
+                                        <% } %>
+                                        
+                                        <form style="display:inline" method="POST" action="/users/<%= user.id %>?_method=DELETE">
+                                            <button type="submit" 
+                                                    class="inline-flex items-center px-3 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white text-sm rounded-lg hover:from-red-600 hover:to-red-700 transform hover:scale-105 transition-all duration-300 shadow-lg">
+                                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                                </svg>
+                                                Xóa
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Navigation Link -->
+        <div class="mt-8 text-center">
+            <a href="/" class="inline-flex items-center space-x-2 text-blue-300 hover:text-blue-200 transition-colors duration-300 hover:scale-105 transform">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                </svg>
+                <span>Thêm user mới</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<style>
+@keyframes fade-in {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slide-in {
+    from { opacity: 0; transform: translateX(-20px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+.animate-fade-in {
+    animation: fade-in 0.6s ease-out;
+}
+
+.animate-slide-in {
+    animation: slide-in 0.5s ease-out forwards;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+</style> 
